@@ -1,11 +1,19 @@
 import bcrypt from "bcryptjs";
+import { Request } from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/Auth";
+import regestrationValidation from "../validation";
 
 const signUp = async (req: any, res: any) => {
   try {
     const { name, email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
+    const { error } = regestrationValidation(req.body);
+    if (error) {
+      return res.status(400).json({
+        error: error.details,
+      });
+    }
     if (!name && !email && !password) {
       return res.status(422).json({
         status: "Failed",
@@ -61,6 +69,7 @@ const signIn = async (req: any, res: any) => {
       const token = jwt.sign({ _id: user.id }, process.env.JWTSECRET || "");
 
       console.log(token);
+
       res.status(200).json({ user: user, token: token });
     }
   } catch (err) {

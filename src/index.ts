@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import AuthRoutes from "./routes/AuthRoutes";
+import PostRoutes from "./routes/PostRoutes";
 const app = express();
 
 app.get("/about", (req, res) => {
@@ -23,6 +24,7 @@ dotenv.config();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/v1/auth", AuthRoutes);
+app.use("/api/v1/post", PostRoutes);
 mongoose.connect(
   process.env.MONGOURI || "",
   {
